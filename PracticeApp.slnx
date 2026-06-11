@@ -1,3 +1,5 @@
 <Solution>
+  <Project Path="Business Logic/Business Logic.csproj" />
+  <Project Path="Data Logic/Data Logic.csproj" />
   <Project Path="PracticeApp/PracticeApp.csproj" />
 </Solution>
