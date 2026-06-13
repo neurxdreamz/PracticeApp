@@ -70,6 +70,43 @@ namespace Data_Logic.Repositories
             }
         }
 
+       /// <summary>
+       /// Добавление нового пользователя пароля
+       /// </summary>
+       public void AddUser (User user, string passwordHash)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            if (string.IsNullOrWhiteSpace(passwordHash))
+            {
+                throw new ArgumentNullException(passwordHash);
+            }
+
+            try
+            {
+                using (var connection = new OleDbConnection(connectionString))
+                {
+                    connection.Open();
+
+                    InsertIntoUsersTable(connection, user);
+
+                    
+                    int newUserId = GetLastInsertedId(connection);
+
+                   
+                    InsertIntoPasswordsTable(connection, newUserId, passwordHash);
+                }
+            }
+            
+            catch (OleDbException ex)
+            {
+                throw new Exception("Ошибка при добавлении нового пользователя", ex);
+            }
+        }
+
 
         private User MapUserFromReader(OleDbDataReader reader)
         {
