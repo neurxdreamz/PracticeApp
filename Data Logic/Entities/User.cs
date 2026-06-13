@@ -8,7 +8,7 @@ namespace Data_Logic.Entities
     {
         public int IdUser { get; set; }
         public int IdRole { get; set; }
-        public string UserName { get; set; }
+        public string Username { get; set; }
 
         public Role RoleName { get; set; }
     }

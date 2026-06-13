@@ -162,7 +162,12 @@ namespace Data_Logic.Repositories
 
         private User MapUserFromReader(OleDbDataReader reader)
         {
-
+            return new User
+            {
+                IdUser = Convert.ToInt32(reader["id_user"]),
+                IdRole = Convert.ToInt32(reader["id_role"]),
+                Username = reader["username"].ToString()
+            };
         }
     }
 }
