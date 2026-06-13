@@ -141,13 +141,26 @@ namespace Data_Logic.Repositories
         }
 
 
-
-        private User MapUserFromReader(OleDbDataReader reader)
+        private User ExecuteUserSelectQuery(OleDbConnection connection, string username)
         {
+            string query = "SELECT id_user, id_role, username FROM users WHERE username = @username";
 
+            using (var command = new OleDbCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@username", username);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return MapUserFromReader(reader);
+                    }
+                }
+            }
+            return null;
         }
 
-        private User ExecuteUserSelectQuery(OleDbConnection connection, string username)
+        private User MapUserFromReader(OleDbDataReader reader)
         {
 
         }
