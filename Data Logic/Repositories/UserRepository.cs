@@ -181,5 +181,24 @@ namespace Data_Logic.Repositories
                 command.ExecuteNonQuery();
             }
         }
+
+        private void InsertIntoPasswordsTable(OleDbConnection connection, int UserId, string PasswordHash)
+        {
+            string query = "INSERT INTO passwords (id_user, password_hash) VALUES (@id, @hash)";
+            using (var command = new OleDbCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@id", UserId);
+                command.Parameters.AddWithValue("@hash", PasswordHash);
+                command.ExecuteNonQuery();
+            }
+        }
+        private int GetLastInsertedId (OleDbConnection connection)
+        {
+            string query = "SELECT @@IDENTITY";
+            using (var command = new OleDbCommand(query, connection))
+            {
+                return Convert.ToInt32(command.ExecuteScalar());
+            }
+        }
     }
 }
