@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.OleDb;
 using System.Text;
+using System.Threading.Tasks.Sources;
 
 namespace Data_Logic.Repositories
 {
@@ -58,7 +59,7 @@ namespace Data_Logic.Repositories
             }
             try
             {
-                using (var connection = OleDbConnection(connectionString))
+                using (var connection = new OleDbConnection(connectionString))
                 {
                     connection.Open();
                     return ExecuteUserSelectQuery(connection, username);
@@ -106,6 +107,39 @@ namespace Data_Logic.Repositories
                 throw new Exception("Ошибка при добавлении нового пользователя", ex);
             }
         }
+
+        /// <summary>
+        /// Удаление пользователя
+        /// </summary>
+        public void DeleteUser (int UserId)
+        {
+            if (UserId <= 0)
+            {
+                throw new ArgumentException("Некорректнй ID пользователя", nameof(UserId));
+            }
+
+            try
+            {
+                using (var connection = new OleDbConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string query = "DELETE FROM users WHERE id_user = @id";
+
+                    using (var command = new OleDbCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@id", UserId);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+
+            catch (OleDbException ex)
+            {
+                throw new Exception("Ошибка при удалении пользователя", ex);
+            }
+        }
+
 
 
         private User MapUserFromReader(OleDbDataReader reader)
