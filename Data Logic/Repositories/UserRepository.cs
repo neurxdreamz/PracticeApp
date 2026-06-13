@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data_Logic.Entities;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.OleDb;
@@ -44,6 +45,40 @@ namespace Data_Logic.Repositories
             }
 
             return users;
+        }
+
+        /// <summary>
+        /// Получение пользователя по логину
+        /// </summary>
+        public User GetUserByUsername (string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                throw new ArgumentNullException(nameof(username), "Логин не может быть пустым!");
+            }
+            try
+            {
+                using (var connection = OleDbConnection(connectionString))
+                {
+                    connection.Open();
+                    return ExecuteUserSelectQuery(connection, username);
+                }
+            }
+            catch (OleDbException ex)
+            {
+                throw new Exception($"Ошибка при поиске пользователя: {username}", ex);
+            }
+        }
+
+
+        private User MapUserFromReader(OleDbDataReader reader)
+        {
+
+        }
+
+        private User ExecuteUserSelectQuery(OleDbConnection connection, string username)
+        {
+
         }
     }
 }
