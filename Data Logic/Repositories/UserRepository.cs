@@ -169,5 +169,17 @@ namespace Data_Logic.Repositories
                 Username = reader["username"].ToString()
             };
         }
+
+        private void InsertIntoUsersTable (OleDbConnection connection, User user)
+        {
+            string query = "INSERT INTO users (id_role, username) VALUES (@role, @username)";
+
+            using (var command = new OleDbCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@role", user.IdRole);
+                command.Parameters.AddWithValue("@username", user.Username);
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }
