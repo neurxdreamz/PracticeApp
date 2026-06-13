@@ -83,7 +83,7 @@ namespace Data_Logic.Repositories
 
             if (string.IsNullOrWhiteSpace(passwordHash))
             {
-                throw new ArgumentNullException(passwordHash);
+                throw new ArgumentNullException(nameof(passwordHash));
             }
 
             try
