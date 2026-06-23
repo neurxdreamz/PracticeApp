@@ -1,0 +1,41 @@
+﻿<Window x:Class="PracticeApp.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Управление производством - Детали" Height="450" Width="800">
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <Button Content="Добавить деталь" Width="120" Margin="0,0,10,0" Padding="5"/>
+            <Button Content="Обновить список" Width="120" Padding="5"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="1" 
+                  ItemsSource="{Binding Details}" 
+                  AutoGenerateColumns="False" 
+                  IsReadOnly="True" 
+                  SelectionMode="Single">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding IdRecord}" Width="50"/>
+                <DataGridTextColumn Header="Название детали" Binding="{Binding DetailName}" Width="*"/>
+                <DataGridTextColumn Header="Объем партии" Binding="{Binding BatchVolume}" Width="100"/>
+
+                <DataGridTextColumn Header="Участок" Binding="{Binding SectorName}" Width="150"/>
+                <DataGridTextColumn Header="Рабочий" Binding="{Binding WorkerFullName}" Width="200"/>
+                <DataGridTextColumn Header="Смена №" Binding="{Binding ShiftNumber}" Width="80"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

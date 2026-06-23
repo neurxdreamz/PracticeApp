@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Business_Logic.Services
 {
-    internal interface ISectorService
+    public interface ISectorService
     {
         IEnumerable<Sector> GetAllSectors();
         Sector GetSectorById(int id);

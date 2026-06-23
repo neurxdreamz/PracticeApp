@@ -8,17 +8,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows;
+using PracticeApp.ViewModels;
 
-namespace PracticeApp
+namespace PracticeApp.Views
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        // Добавляем MainViewModel в параметры конструктора
+        public MainWindow(MainViewModel viewModel)
         {
             InitializeComponent();
+
+            // Говорим окну: "Твои данные и команды лежат в этом классе"
+            DataContext = viewModel;
         }
     }
 }
