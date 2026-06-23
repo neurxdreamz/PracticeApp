@@ -11,14 +11,26 @@
         <TextBlock Text="Объем партии:"/>
         <TextBox Text="{Binding BatchVolume}" Margin="0,0,0,10" Padding="2"/>
 
-        <TextBlock Text="ID Участка:"/>
-        <TextBox Text="{Binding SectorId}" Margin="0,0,0,10" Padding="2"/>
+        <TextBlock Text="Участок:"/>
+        <ComboBox ItemsSource="{Binding Sectors}" 
+                  DisplayMemberPath="SectorName" 
+                  SelectedValuePath="IdSector" 
+                  SelectedValue="{Binding SectorId}" 
+                  Margin="0,0,0,10" Padding="2"/>
 
-        <TextBlock Text="ID Рабочего:"/>
-        <TextBox Text="{Binding WorkerId}" Margin="0,0,0,10" Padding="2"/>
+        <TextBlock Text="Рабочий:"/>
+        <ComboBox ItemsSource="{Binding Workers}" 
+                  DisplayMemberPath="FullName" 
+                  SelectedValuePath="IdWorker" 
+                  SelectedValue="{Binding WorkerId}" 
+                  Margin="0,0,0,10" Padding="2"/>
 
-        <TextBlock Text="ID Смены:"/>
-        <TextBox Text="{Binding ShiftId}" Margin="0,0,0,20" Padding="2"/>
+        <TextBlock Text="Номер смены:"/>
+        <ComboBox ItemsSource="{Binding Shifts}" 
+                  DisplayMemberPath="ShiftNumber" 
+                  SelectedValuePath="IdShift" 
+                  SelectedValue="{Binding ShiftId}" 
+                  Margin="0,0,0,20" Padding="2"/>
 
         <Button Content="Сохранить в БД" Command="{Binding SaveCommand}" Height="30"/>
     </StackPanel>

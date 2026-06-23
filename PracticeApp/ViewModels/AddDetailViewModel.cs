@@ -3,8 +3,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Data_Logic.Entities;
 using System;
+using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Media.Media3D;
 
 namespace PracticeApp.ViewModels
 {
@@ -12,14 +12,18 @@ namespace PracticeApp.ViewModels
     {
         private readonly IDetailService _detailService;
 
-        
+ 
+        private readonly ISectorService _sectorService;
+        private readonly IWorkerService _workerService;
+        private readonly IShiftService _shiftService;
+
         [ObservableProperty]
         private string _detailName;
 
         [ObservableProperty]
         private int _batchVolume;
 
-      
+       
         [ObservableProperty]
         private int _sectorId;
 
@@ -29,12 +33,39 @@ namespace PracticeApp.ViewModels
         [ObservableProperty]
         private int _shiftId;
 
-     
+       
+        [ObservableProperty]
+        private ObservableCollection<Sector> _sectors;
+
+        [ObservableProperty]
+        private ObservableCollection<Worker> _workers;
+
+        [ObservableProperty]
+        private ObservableCollection<Shift> _shifts;
+
         public Action CloseAction { get; set; }
 
-        public AddDetailViewModel(IDetailService detailService)
+       
+        public AddDetailViewModel(
+            IDetailService detailService,
+            ISectorService sectorService,
+            IWorkerService workerService,
+            IShiftService shiftService)
         {
             _detailService = detailService;
+            _sectorService = sectorService;
+            _workerService = workerService;
+            _shiftService = shiftService;
+
+ 
+            LoadDropdownData();
+        }
+
+        private void LoadDropdownData()
+        {
+            Sectors = new ObservableCollection<Sector>(_sectorService.GetAllSectors());
+            Workers = new ObservableCollection<Worker>(_workerService.GetAllWorkers());
+            Shifts = new ObservableCollection<Shift>(_shiftService.GetAllShifts());
         }
 
         [RelayCommand]
@@ -46,20 +77,16 @@ namespace PracticeApp.ViewModels
                 {
                     DetailName = DetailName,
                     BatchVolume = BatchVolume,
-                    SectorId = SectorId,
+                    SectorId = SectorId,   
                     WorkerId = WorkerId,
                     ShiftId = ShiftId
                 };
 
-              
                 _detailService.AddDetail(newDetail);
-
-            
                 CloseAction?.Invoke();
             }
             catch (Exception ex)
             {
-               
                 MessageBox.Show(ex.Message, "Ошибка сохранения", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
