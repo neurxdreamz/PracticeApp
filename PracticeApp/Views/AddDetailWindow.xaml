@@ -1,0 +1,25 @@
+﻿<Window x:Class="PracticeApp.Views.AddDetailWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Добавление новой детали" Height="350" Width="300" 
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+
+    <StackPanel Margin="15">
+        <TextBlock Text="Название детали:"/>
+        <TextBox Text="{Binding DetailName}" Margin="0,0,0,10" Padding="2"/>
+
+        <TextBlock Text="Объем партии:"/>
+        <TextBox Text="{Binding BatchVolume}" Margin="0,0,0,10" Padding="2"/>
+
+        <TextBlock Text="ID Участка:"/>
+        <TextBox Text="{Binding SectorId}" Margin="0,0,0,10" Padding="2"/>
+
+        <TextBlock Text="ID Рабочего:"/>
+        <TextBox Text="{Binding WorkerId}" Margin="0,0,0,10" Padding="2"/>
+
+        <TextBlock Text="ID Смены:"/>
+        <TextBox Text="{Binding ShiftId}" Margin="0,0,0,20" Padding="2"/>
+
+        <Button Content="Сохранить в БД" Command="{Binding SaveCommand}" Height="30"/>
+    </StackPanel>
+</Window>

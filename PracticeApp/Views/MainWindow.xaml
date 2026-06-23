@@ -17,12 +17,14 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-            <Button Content="Добавить деталь" Width="120" Margin="0,0,10,0" Padding="5"/>
-            <Button Content="Обновить список" Width="120" Padding="5"/>
+            <Button Content="Добавить деталь" Command="{Binding OpenAddWindowCommand}" Width="120" Margin="0,0,10,0" Padding="5"/>
+            <Button Content="Обновить список" Command="{Binding RefreshCommand}" Width="120" Padding="5"/>
+            <Button Content="Удалить выбранную" Command="{Binding DeleteDetailCommand}" Width="126" Padding="5"/>
         </StackPanel>
 
         <DataGrid Grid.Row="1" 
                   ItemsSource="{Binding Details}" 
+                  SelectedItem="{Binding SelectedDetail}" 
                   AutoGenerateColumns="False" 
                   IsReadOnly="True" 
                   SelectionMode="Single">
