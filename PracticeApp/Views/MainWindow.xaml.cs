@@ -23,5 +23,10 @@ namespace PracticeApp.Views
             // Говорим окну: "Твои данные и команды лежат в этом классе"
             DataContext = viewModel;
         }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

@@ -19,6 +19,7 @@ namespace PracticeApp.ViewModels
         private readonly IWorkerService _workerService;
         private readonly ISectorService _sectorService;
         private readonly IAuthService _authService;
+        private readonly IShiftService _shiftService;
 
         [ObservableProperty]
         private ObservableCollection<Detail> details;
@@ -42,6 +43,9 @@ namespace PracticeApp.ViewModels
         [ObservableProperty]
         private ObservableCollection<Sector> _sectors;
 
+        [ObservableProperty]
+        private ObservableCollection<Shift> _shifts;
+
 
         public void SetupAccessRights(int roleId)
         {
@@ -55,13 +59,14 @@ namespace PracticeApp.ViewModels
         private ICollectionView _detailsView;
 
 
-        public MainViewModel(IDetailService detailService, IAuthService authService, IWorkerService workerService, ISectorService sectorService, IServiceProvider serviceProvider)
+        public MainViewModel(IDetailService detailService, IAuthService authService, IWorkerService workerService, ISectorService sectorService, IShiftService shiftService, IServiceProvider serviceProvider)
         {
             _detailService = detailService;
             _authService = authService;
             _workerService = workerService;
             _sectorService = sectorService;
             _serviceProvider = serviceProvider;
+            _shiftService = shiftService;
 
             LoadDetails();
             LoadDictionaries(); 
@@ -188,9 +193,9 @@ namespace PracticeApp.ViewModels
 
         private void LoadDictionaries()
         {
-           
             Workers = new ObservableCollection<Worker>(_workerService.GetAllWorkers());
             Sectors = new ObservableCollection<Sector>(_sectorService.GetAllSectors());
+            Shifts = new ObservableCollection<Shift>(_shiftService.GetAllShifts()); 
         }
     }
 }
