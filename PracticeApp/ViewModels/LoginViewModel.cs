@@ -40,13 +40,16 @@ namespace PracticeApp.ViewModels
                 
                 User loggedInUser = _authService.AuthenticateUser(Username, rawPassword);
 
-            
+                
                 var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
 
-          
+               
+                var mainViewModel = (MainViewModel)mainWindow.DataContext;
+                mainViewModel.SetupAccessRights(loggedInUser.IdRole);
 
+               
                 mainWindow.Show();
-                CloseAction?.Invoke(); 
+                CloseAction?.Invoke();
             }
             catch (Exception ex)
             {

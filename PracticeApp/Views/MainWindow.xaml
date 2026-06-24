@@ -5,6 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Управление производством - Детали" Height="450" Width="800">
+    
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -33,10 +37,20 @@
         </Grid>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-            <Button Content="Добавить деталь" Command="{Binding OpenAddWindowCommand}" Width="120" Margin="0,0,10,0" Padding="5"/>
-            <Button Content="Обновить список" Command="{Binding RefreshCommand}" Width="120" Padding="5"/>
-            <Button Content="Редактировать" Command="{Binding OpenEditWindowCommand}" Width="120" Margin="0,0,10,0" Padding="5"/>
-            <Button Content="Удалить выбранную" Command="{Binding DeleteDetailCommand}" Width="126" Padding="5"/>
+            <Button Content="Добавить деталь" Command="{Binding OpenAddWindowCommand}" 
+                    Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}" 
+                    Width="120" Margin="0,0,10,0" Padding="5"/>
+
+            <Button Content="Редактировать" Command="{Binding OpenEditWindowCommand}" 
+                    Visibility="{Binding IsEditor, Converter={StaticResource BoolToVis}}" 
+                    Width="120" Margin="0,0,10,0" Padding="5"/>
+
+            <Button Content="Удалить" Command="{Binding DeleteDetailCommand}" 
+                    Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}" 
+                    Width="100" Margin="0,0,10,0" Padding="5"/>
+
+            <Button Content="Обновить" Command="{Binding RefreshCommand}" 
+                    Width="100" Padding="5"/>
         </StackPanel>
 
         <DataGrid Grid.Row="2" 

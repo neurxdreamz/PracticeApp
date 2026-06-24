@@ -27,7 +27,22 @@ namespace PracticeApp.ViewModels
         [ObservableProperty]
         private string _searchText;
 
-       
+        [ObservableProperty]
+        private bool _isAdmin;
+
+        [ObservableProperty]
+        private bool _isEditor;
+
+        
+        public void SetupAccessRights(int roleId)
+        {
+
+            IsAdmin = roleId == 1;
+
+            IsEditor = roleId == 1 || roleId == 3;
+        }
+
+
         private ICollectionView _detailsView;
 
 
