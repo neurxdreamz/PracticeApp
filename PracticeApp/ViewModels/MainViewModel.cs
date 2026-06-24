@@ -16,6 +16,9 @@ namespace PracticeApp.ViewModels
     {
         private readonly IDetailService _detailService;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IWorkerService _workerService;
+        private readonly ISectorService _sectorService;
+        private readonly IAuthService _authService;
 
         [ObservableProperty]
         private ObservableCollection<Detail> details;
@@ -33,7 +36,13 @@ namespace PracticeApp.ViewModels
         [ObservableProperty]
         private bool _isEditor;
 
-        
+        [ObservableProperty]
+        private ObservableCollection<Worker> _workers;
+
+        [ObservableProperty]
+        private ObservableCollection<Sector> _sectors;
+
+
         public void SetupAccessRights(int roleId)
         {
 
@@ -46,11 +55,16 @@ namespace PracticeApp.ViewModels
         private ICollectionView _detailsView;
 
 
-        public MainViewModel(IDetailService detailService, IServiceProvider serviceProvider)
+        public MainViewModel(IDetailService detailService, IAuthService authService, IWorkerService workerService, ISectorService sectorService, IServiceProvider serviceProvider)
         {
             _detailService = detailService;
+            _authService = authService;
+            _workerService = workerService;
+            _sectorService = sectorService;
             _serviceProvider = serviceProvider;
+
             LoadDetails();
+            LoadDictionaries(); 
         }
 
         private void LoadDetails()
@@ -170,6 +184,13 @@ namespace PracticeApp.ViewModels
         {
             
             _detailsView?.Refresh();
+        }
+
+        private void LoadDictionaries()
+        {
+           
+            Workers = new ObservableCollection<Worker>(_workerService.GetAllWorkers());
+            Sectors = new ObservableCollection<Sector>(_sectorService.GetAllSectors());
         }
     }
 }
