@@ -59,6 +59,21 @@ namespace PracticeApp
             base.OnStartup(e);
 
            
+            var authService = ServiceProvider.GetRequiredService<IAuthService>();
+
+            if (!authService.IsUserExist("admin"))
+            {
+                try
+                {
+   
+                    authService.RegisterNewUser("admin", 1, "1234");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при создании администратора: {ex.Message}");
+                }
+            }
+
             var loginWindow = ServiceProvider.GetRequiredService<LoginWindow>();
             loginWindow.Show();
         }

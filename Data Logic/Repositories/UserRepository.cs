@@ -143,7 +143,12 @@ namespace Data_Logic.Repositories
 
         private User ExecuteUserSelectQuery(OleDbConnection connection, string username)
         {
-            string query = "SELECT id_user, id_role, username FROM users WHERE username = @username";
+           
+            string query = @"
+                SELECT u.id_user, u.id_role, u.username, p.password_hash 
+                FROM users u
+                INNER JOIN passwords p ON u.id_user = p.id_user
+                WHERE u.username = @username";
 
             using (var command = new OleDbCommand(query, connection))
             {
@@ -153,7 +158,14 @@ namespace Data_Logic.Repositories
                 {
                     if (reader.Read())
                     {
-                        return MapUserFromReader(reader);
+                        
+                        return new User
+                        {
+                            IdUser = Convert.ToInt32(reader["id_user"]),
+                            IdRole = Convert.ToInt32(reader["id_role"]),
+                            Username = reader["username"].ToString(),
+                            PasswordHash = reader["password_hash"].ToString() 
+                        };
                     }
                 }
             }
