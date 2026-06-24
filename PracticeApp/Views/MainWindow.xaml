@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Управление производством - Детали" Height="450" Width="800">
+        Title="Управление производством - Детали" Height="550" Width="1000">
     
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
@@ -102,7 +102,12 @@
             </TabItem>
 
             <TabItem>
-                <DataGrid ItemsSource="{Binding Sectors}" FontWeight="Normal" AutoGenerateColumns="False" IsReadOnly="True">
+                <DataGrid ItemsSource="{Binding Sectors}" 
+                          SelectedItem="{Binding SelectedSector}" 
+                          FontWeight="Normal" 
+                          AutoGenerateColumns="False" 
+                          IsReadOnly="True" 
+                          SelectionMode="Single">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding IdSector}" Width="50"/>
                         <DataGridTextColumn Header="Название участка" Binding="{Binding SectorName}" Width="150"/>
@@ -112,7 +117,12 @@
             </TabItem>
 
             <TabItem>
-                <DataGrid ItemsSource="{Binding Shifts}" FontWeight="Normal" AutoGenerateColumns="False" IsReadOnly="True">
+                <DataGrid ItemsSource="{Binding Shifts}" 
+                          SelectedItem="{Binding SelectedShift}" 
+                          FontWeight="Normal" 
+                          AutoGenerateColumns="False" 
+                          IsReadOnly="True" 
+                          SelectionMode="Single">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding IdShift}" Width="50"/>
                         <DataGridTextColumn Header="Номер смены" Binding="{Binding ShiftNumber}" Width="120"/>

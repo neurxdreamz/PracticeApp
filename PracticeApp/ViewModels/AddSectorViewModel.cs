@@ -20,12 +20,31 @@ namespace PracticeApp.ViewModels
         [RelayCommand]
         private void Save()
         {
+
+            if (string.IsNullOrWhiteSpace(SectorName))
+            {
+                MessageBox.Show("Поле 'Название участка' не может быть пустым!", "Ошибка заполнения", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return; 
+            }
+
+
+            
+            if (string.IsNullOrWhiteSpace(ManagerFullName))
+            {
+                MessageBox.Show("Поле 'ФИО Начальника' не может быть пустым!", "Ошибка заполнения", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             try
             {
+                
                 _sectorService.AddSector(new Sector { SectorName = SectorName, ManagerFullName = ManagerFullName });
                 CloseAction?.Invoke();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка базы данных", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

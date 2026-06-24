@@ -9,7 +9,7 @@
         <TextBox Text="{Binding SectorName}" Margin="0,0,0,10" Padding="4"/>
 
         <TextBlock Text="ФИО Начальника:"/>
-        <TextBox Text="{Binding Supervisor}" Margin="0,0,0,20" Padding="4"/>
+        <TextBox Text="{Binding ManagerFullName}" Margin="0,0,0,20" Padding="4"/>
 
         <Button Content="Сохранить изменения" Command="{Binding SaveCommand}" 
                 Height="35" Background="#4169E1" Foreground="White" FontWeight="Bold" BorderThickness="0"/>
