@@ -101,7 +101,7 @@
                         <DataGridTextColumn Header="ID" Binding="{Binding IdSector}" Width="50"/>
                         <DataGridTextColumn Header="Название участка" Binding="{Binding SectorName}" Width="150"/>
 
-                        <DataGridTextColumn Header="ФИО Начальника" Binding="{Binding Supervisor}" Width="*"/>
+                        <DataGridTextColumn Header="ФИО Начальника" Binding="{Binding ManagerFullName}" Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
