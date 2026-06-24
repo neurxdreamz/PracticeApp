@@ -57,6 +57,17 @@ namespace PracticeApp
             services.AddTransient<EditWorkerViewModel>();
             services.AddTransient<EditWorkerWindow>();
 
+            services.AddTransient<AddSectorViewModel>();
+            services.AddTransient<AddSectorWindow>();
+            services.AddTransient<EditSectorViewModel>();
+            services.AddTransient<EditSectorWindow>();
+
+            
+            services.AddTransient<AddShiftViewModel>();
+            services.AddTransient<AddShiftWindow>();
+            services.AddTransient<EditShiftViewModel>();
+            services.AddTransient<EditShiftWindow>();
+
         }
 
 
