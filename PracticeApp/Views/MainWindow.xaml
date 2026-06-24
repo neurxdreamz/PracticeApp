@@ -13,16 +13,33 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+        <Grid Grid.Row="1" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Поиск: " VerticalAlignment="Center" FontWeight="Bold" Foreground="#333" Margin="0,0,5,0"/>
+
+            <TextBox Grid.Column="1" 
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
+                     Padding="4" 
+                     VerticalContentAlignment="Center"
+                     ToolTip="Введите название детали, ФИО рабочего или участок для фильтрации..."/>
+        </Grid>
 
         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
             <Button Content="Добавить деталь" Command="{Binding OpenAddWindowCommand}" Width="120" Margin="0,0,10,0" Padding="5"/>
             <Button Content="Обновить список" Command="{Binding RefreshCommand}" Width="120" Padding="5"/>
+            <Button Content="Редактировать" Command="{Binding OpenEditWindowCommand}" Width="120" Margin="0,0,10,0" Padding="5"/>
             <Button Content="Удалить выбранную" Command="{Binding DeleteDetailCommand}" Width="126" Padding="5"/>
         </StackPanel>
 
-        <DataGrid Grid.Row="1" 
+        <DataGrid Grid.Row="2" 
                   ItemsSource="{Binding Details}" 
                   SelectedItem="{Binding SelectedDetail}" 
                   AutoGenerateColumns="False" 

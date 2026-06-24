@@ -11,5 +11,6 @@ namespace Data_Logic.Entities
         public string Username { get; set; }
 
         public Role RoleName { get; set; }
+        public string PasswordHash { get; set; }
     }
 }

@@ -56,6 +56,26 @@ namespace Business_Logic.Services
             var user = UserRepository.GetUserByUsername(username);
             return user != null;
         }
+
+        public User AuthenticateUser(string username, string rawPassword)
+        {
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(rawPassword))
+                throw new ArgumentException("Логин и пароль не могут быть пустыми.");
+
+            var user = UserRepository.GetUserByUsername(username);
+
+            if (user == null)
+                throw new InvalidOperationException("Пользователь с таким логином не найден.");
+
+         
+            string inputHash = PasswordHasher.HashPassword(rawPassword);
+
+           
+            if (user.PasswordHash != inputHash)
+                throw new InvalidOperationException("Неверный пароль.");
+
+            return user;
+        }
     }
     
 }

@@ -45,9 +45,12 @@ namespace PracticeApp
             services.AddTransient<AddDetailViewModel>();
             services.AddTransient<AddDetailWindow>();
 
-            // Если будем делать окно авторизации:
-            // services.AddTransient<LoginViewModel>();
-            // services.AddTransient<LoginWindow>();
+            services.AddTransient<EditDetailViewModel>();
+            services.AddTransient<EditDetailWindow>();
+
+            services.AddTransient<LoginViewModel>();
+            services.AddTransient<LoginWindow>();
+
         }
 
 
@@ -55,8 +58,9 @@ namespace PracticeApp
         {
             base.OnStartup(e);
 
-            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+           
+            var loginWindow = ServiceProvider.GetRequiredService<LoginWindow>();
+            loginWindow.Show();
         }
     }
 }
