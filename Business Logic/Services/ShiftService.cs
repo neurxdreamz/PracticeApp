@@ -63,8 +63,7 @@ namespace Business_Logic.Services
                 throw new ArgumentNullException(nameof(shift));
 
             
-            if (shift.ShiftNumber < 1 || shift.ShiftNumber > 4)
-                throw new ArgumentException("Номер смены должен быть от 1 до 4.");
+
 
            
             if (!string.IsNullOrWhiteSpace(shift.Foreman) && shift.Foreman.Trim().Length < 4)

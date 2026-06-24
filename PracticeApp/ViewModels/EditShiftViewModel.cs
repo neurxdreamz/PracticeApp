@@ -38,11 +38,23 @@ namespace PracticeApp.ViewModels
         [RelayCommand]
         private void Save()
         {
+            if (ShiftNumber <= 0)
+            {
+                MessageBox.Show("Номер смены должен быть положительным числом!", "Ошибка заполнения", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(Foreman))
+            {
+                MessageBox.Show("Поле 'ФИО Бригадира' не может быть пустым!", "Ошибка заполнения", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             try
             {
                 var updatedShift = new Shift
                 {
-                    IdShift = _idShift, 
+                    IdShift = _idShift,
                     ShiftNumber = ShiftNumber,
                     Foreman = Foreman
                 };
