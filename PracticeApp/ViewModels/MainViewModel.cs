@@ -20,6 +20,7 @@ namespace PracticeApp.ViewModels
         private readonly ISectorService _sectorService;
         private readonly IAuthService _authService;
         private readonly IShiftService _shiftService;
+        private readonly ReportService _reportService = new ReportService();
 
         [ObservableProperty]
         private ObservableCollection<Detail> details;
@@ -58,13 +59,33 @@ namespace PracticeApp.ViewModels
         [ObservableProperty]
         private Shift _selectedShift;
 
+        [ObservableProperty]
+        private string _currentUserRoleName;
+
+        public Action CloseAction { get; set; }
+
 
         public void SetupAccessRights(int roleId)
         {
-
             IsAdmin = roleId == 1;
-
             IsEditor = roleId == 1 || roleId == 3;
+
+            
+            switch (roleId)
+            {
+                case 1:
+                    CurrentUserRoleName = "Администратор";
+                    break;
+                case 3:
+                    CurrentUserRoleName = "Редактор";
+                    break;
+                case 2:
+                    CurrentUserRoleName = "Наблюдатель";
+                    break;
+                default:
+                    CurrentUserRoleName = "Неизвестная роль";
+                    break;
+            }
         }
 
 
@@ -223,6 +244,14 @@ namespace PracticeApp.ViewModels
             }
         }
 
+        [RelayCommand]
+        private void OpenUserManagement()
+        {
+            
+            var userWindow = _serviceProvider.GetRequiredService<UserManagementWindow>();
+            userWindow.ShowDialog();
+        }
+
         private bool FilterDetails(object obj)
         {
             
@@ -243,6 +272,73 @@ namespace PracticeApp.ViewModels
             }
 
             return false;
+        }
+
+        
+        [RelayCommand]
+        private void Logout()
+        {
+            try
+            {
+               
+                var authWindow = _serviceProvider.GetRequiredService<LoginWindow>();
+
+               
+                Application.Current.MainWindow = authWindow;
+
+               
+                authWindow.Show();
+
+                CloseAction?.Invoke();
+            }
+            catch (Exception ex)
+            {
+               
+                MessageBox.Show($"Ошибка при выходе: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        [RelayCommand]
+        private void ExportToPdf()
+        {
+           
+            if (Details == null || Details.Count == 0)
+            {
+                MessageBox.Show("Нет данных для формирования отчета.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+          
+            Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog
+            {
+                FileName = $"Отчет_производства_{DateTime.Now:yyyyMMdd}", 
+                DefaultExt = ".pdf",                                      
+                Filter = "PDF Documents (.pdf)|*.pdf"                  
+            };
+
+          
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    
+                    var filteredData = new List<Detail>();
+                    foreach (var item in _detailsView)
+                    {
+                        if (item is Detail detail)
+                            filteredData.Add(detail);
+                    }
+
+                    
+                    _reportService.ExportDetailsToPdf(saveFileDialog.FileName, filteredData);
+
+                    MessageBox.Show("Отчет успешно сохранен в PDF!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при сохранении отчета: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         private bool FilterWorkers(object obj)

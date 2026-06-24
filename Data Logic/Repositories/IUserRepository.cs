@@ -7,9 +7,10 @@ namespace Data_Logic.Repositories
 {
     public interface IUserRepository
     {
-        User GetUserByUsername(string username);
         IEnumerable<User> GetAllUsers();
-        void AddUser(User user, string passwordHash);
-        void DeleteUser(int userId);
+        User GetUserByUsername(string username);
+        void AddUser(User user, string passwordHash); 
+        void UpdateUser(User user);                   
+        void DeleteUser(int id);
     }
 }

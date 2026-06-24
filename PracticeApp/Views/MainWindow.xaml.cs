@@ -10,23 +10,24 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows;
 using PracticeApp.ViewModels;
+using PracticeApp.ViewModels;
+using System;
+using System.Windows;
 
 namespace PracticeApp.Views
 {
     public partial class MainWindow : Window
     {
-        // Добавляем MainViewModel в параметры конструктора
         public MainWindow(MainViewModel viewModel)
         {
             InitializeComponent();
-
-            // Говорим окну: "Твои данные и команды лежат в этом классе"
             DataContext = viewModel;
-        }
 
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
+           
+            if (viewModel.CloseAction == null)
+            {
+                viewModel.CloseAction = new Action(this.Close);
+            }
         }
     }
 }

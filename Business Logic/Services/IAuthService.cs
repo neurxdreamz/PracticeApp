@@ -7,8 +7,13 @@ namespace Business_Logic.Services
 {
     public interface IAuthService
     {
-        void RegisterNewUser (string username, int RoleId, string RawPassword);
+        void RegisterNewUser(string username, int RoleId, string RawPassword);
         bool IsUserExist(string username);
         User AuthenticateUser(string username, string rawPassword);
+
+        
+        IEnumerable<User> GetAllUsers();
+        void UpdateUser(User user);
+        void DeleteUser(int id);
     }
 }

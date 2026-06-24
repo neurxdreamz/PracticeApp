@@ -76,6 +76,47 @@ namespace Business_Logic.Services
 
             return user;
         }
+
+        public IEnumerable<User> GetAllUsers()
+        {
+            return UserRepository.GetAllUsers();
+        }
+
+        public void DeleteUser(int id)
+        {
+            UserRepository.DeleteUser(id);
+        }
+
+        public void UpdateUser(User user)
+        {
+            if (user == null) throw new ArgumentNullException(nameof(user));
+
+            
+            var allUsers = UserRepository.GetAllUsers();
+            User oldUser = null;
+
+            foreach (var u in allUsers)
+            {
+                if (u.IdUser == user.IdUser)
+                {
+                    oldUser = u;
+                    break;
+                }
+            }
+
+        
+            if (oldUser != null && user.PasswordHash != oldUser.PasswordHash)
+            {
+                if (string.IsNullOrWhiteSpace(user.PasswordHash) || user.PasswordHash.Length < 4)
+                {
+                    throw new ArgumentException("Новый пароль должен содержать минимум 4 символа!");
+                }
+
+                user.PasswordHash = PasswordHasher.HashPassword(user.PasswordHash);
+            }
+
+            UserRepository.UpdateUser(user);
+        }
     }
     
 }

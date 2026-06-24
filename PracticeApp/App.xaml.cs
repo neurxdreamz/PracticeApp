@@ -68,6 +68,13 @@ namespace PracticeApp
             services.AddTransient<EditShiftViewModel>();
             services.AddTransient<EditShiftWindow>();
 
+            services.AddTransient<UserManagementViewModel>();
+            services.AddTransient<UserManagementWindow>();
+
+            services.AddTransient<LoginWindow>();
+            
+            services.AddTransient<LoginViewModel>();
+
         }
 
 
