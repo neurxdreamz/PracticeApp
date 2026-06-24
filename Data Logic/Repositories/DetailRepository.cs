@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
-using System.Text;
 
 namespace Data_Logic.Repositories
 {
@@ -14,12 +13,11 @@ namespace Data_Logic.Repositories
         {
             connectionString = DataBaseConfig.GetConnectionString();
         }
-    
 
-    /// <summary>
-    /// Получение всех деталей
-    /// </summary>
-    public IEnumerable<Detail> GetAllDetails()
+        /// <summary>
+        /// Получение всех деталей
+        /// </summary>
+        public IEnumerable<Detail> GetAllDetails()
         {
             var details = new List<Detail>();
 
@@ -29,17 +27,21 @@ namespace Data_Logic.Repositories
                 {
                     connection.Open();
 
+                    // ИСПРАВЛЕНО: Выбираем Название_участка, ФИО_рабочего, Номер_смены из соседних таблиц
                     string query = @"
                         SELECT 
-                            d.ID_Записи, d.Название_детали, d.Объём_партии, 
-                            d.Участок, d.Рабочий, d.Смена,
-                            s.Участок AS Название_Участка, 
+                            d.ID_Записи, 
+                            d.Название_детали, 
+                            d.Объём_партии, 
+                            d.Норма_времени, 
+                            d.Дата_изготовления,
+                            s.Участок, 
                             w.ФИО_рабочего, 
-                            sh.[№_Смены]
-                        FROM (((Деталь d
-                        LEFT JOIN Участок s ON d.Участок = s.ID_Участка)
-                        LEFT JOIN Рабочий w ON d.Рабочий = w.ID_Рабочего)
-                        LEFT JOIN Смена sh ON d.Смена = sh.ID_Смены)";
+                            sh.№_Смены
+                        FROM (((Деталь AS d
+                        INNER JOIN Участок AS s ON d.Участок = s.ID_Участка)
+                        INNER JOIN Рабочий AS w ON d.Рабочий = w.ID_Рабочего)
+                        INNER JOIN Смена AS sh ON d.Смена = sh.ID_Смены)";
 
                     using (var command = new OleDbCommand(query, connection))
                     using (var reader = command.ExecuteReader())
@@ -53,7 +55,7 @@ namespace Data_Logic.Repositories
             }
             catch (OleDbException ex)
             {
-                throw new Exception("Ошибка при получении списка деталей из БД.", ex);
+                throw new Exception($"Сбой запроса: {ex.Message}");
             }
 
             return details;
@@ -71,17 +73,22 @@ namespace Data_Logic.Repositories
                 using (var connection = new OleDbConnection(connectionString))
                 {
                     connection.Open();
+
+                   
                     string query = @"
                         SELECT 
-                            d.ID_Записи, d.Название_детали, d.Объём_партии, 
-                            d.Участок, d.Рабочий, d.Смена,
-                            s.Участок AS Название_Участка, 
+                            d.ID_Записи, 
+                            d.Название_детали, 
+                            d.Объём_партии, 
+                            d.Норма_времени, 
+                            d.Дата_изготовления,
+                            s.Участок, 
                             w.ФИО_рабочего, 
-                            sh.[№_Смены]
-                        FROM (((Деталь d
-                        LEFT JOIN Участок s ON d.Участок = s.ID_Участка)
-                        LEFT JOIN Рабочий w ON d.Рабочий = w.ID_Рабочего)
-                        LEFT JOIN Смена sh ON d.Смена = sh.ID_Смены)
+                            sh.№_Смены
+                        FROM (((Деталь AS d
+                        INNER JOIN Участок AS s ON d.Участок = s.ID_Участка)
+                        INNER JOIN Рабочий AS w ON d.Рабочий = w.ID_Рабочего)
+                        INNER JOIN Смена AS sh ON d.Смена = sh.ID_Смены)
                         WHERE d.ID_Записи = @id";
 
                     using (var command = new OleDbCommand(query, connection))
@@ -117,12 +124,16 @@ namespace Data_Logic.Repositories
                 using (var connection = new OleDbConnection(connectionString))
                 {
                     connection.Open();
-                    string query = "INSERT INTO Деталь (Название_детали, Объём_партии, Участок, Рабочий, Смена) VALUES (@name, @volume, @sector, @worker, @shift)";
+
+                    // ИСПРАВЛЕНО: В таблице Деталь столбцы называются Участок, Рабочий, Смена (без ID_)
+                    string query = "INSERT INTO Деталь (Название_детали, Объём_партии, Норма_времени, Дата_изготовления, Участок, Рабочий, Смена) VALUES (@name, @volume, @timeNorm, @date, @sector, @worker, @shift)";
 
                     using (var command = new OleDbCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@name", detail.DetailName);
                         command.Parameters.AddWithValue("@volume", detail.BatchVolume);
+                        command.Parameters.AddWithValue("@timeNorm", detail.TimeNorm);
+                        command.Parameters.AddWithValue("@date", detail.ManufactureDate.Date);
                         command.Parameters.AddWithValue("@sector", detail.SectorId);
                         command.Parameters.AddWithValue("@worker", detail.WorkerId);
                         command.Parameters.AddWithValue("@shift", detail.ShiftId);
@@ -150,16 +161,20 @@ namespace Data_Logic.Repositories
                 using (var connection = new OleDbConnection(connectionString))
                 {
                     connection.Open();
-                    // Напоминаю: параметры в OleDb строго по порядку их появления в строке SQL
-                    string query = "UPDATE Деталь SET Название_детали = @name, Объём_партии = @volume, Участок = @sector, Рабочий = @worker, Смена = @shift WHERE ID_Записи = @id";
+
+                    // ИСПРАВЛЕНО: В таблице Деталь столбцы называются Участок, Рабочий, Смена (без ID_)
+                    string query = "UPDATE Деталь SET Название_детали = @name, Объём_партии = @volume, Норма_времени = @timeNorm, Дата_изготовления = @date, Участок = @sector, Рабочий = @worker, Смена = @shift WHERE ID_Записи = @id";
 
                     using (var command = new OleDbCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@name", detail.DetailName);
                         command.Parameters.AddWithValue("@volume", detail.BatchVolume);
+                        command.Parameters.AddWithValue("@timeNorm", detail.TimeNorm);
+                        command.Parameters.AddWithValue("@date", detail.ManufactureDate.Date);
                         command.Parameters.AddWithValue("@sector", detail.SectorId);
                         command.Parameters.AddWithValue("@worker", detail.WorkerId);
                         command.Parameters.AddWithValue("@shift", detail.ShiftId);
+
                         command.Parameters.AddWithValue("@id", detail.IdRecord);
 
                         command.ExecuteNonQuery();
@@ -173,7 +188,7 @@ namespace Data_Logic.Repositories
         }
 
         /// <summary>
-        /// Обновление данных детали
+        /// Удаление данных детали
         /// </summary>
         public void DeleteDetail(int id)
         {
@@ -199,45 +214,22 @@ namespace Data_Logic.Repositories
             }
         }
 
-        // ==========================================
-        // ПРИВАТНЫЕ МЕТОДЫ (МАППИНГ)
-        // ==========================================
         private Detail MapDetailFromReader(OleDbDataReader reader)
         {
-            var detail = new Detail
+            return new Detail
             {
                 IdRecord = Convert.ToInt32(reader["ID_Записи"]),
                 DetailName = reader["Название_детали"].ToString(),
-                BatchVolume = reader["Объём_партии"] != DBNull.Value ? Convert.ToInt32(reader["Объём_партии"]) : 0,
+                BatchVolume = Convert.ToInt32(reader["Объём_партии"]),
 
-                SectorId = reader["Участок"] != DBNull.Value ? Convert.ToInt32(reader["Участок"]) : 0,
-                WorkerId = reader["Рабочий"] != DBNull.Value ? Convert.ToInt32(reader["Рабочий"]) : 0,
-                ShiftId = reader["Смена"] != DBNull.Value ? Convert.ToInt32(reader["Смена"]) : 0
+                TimeNorm = Convert.ToInt32(reader["Норма_времени"]),
+                ManufactureDate = Convert.ToDateTime(reader["Дата_изготовления"]),
+
+                // ИСПРАВЛЕНО: Читаем точно по названиям из БД
+                SectorName = reader["Участок"].ToString(),
+                WorkerFullName = reader["ФИО_рабочего"].ToString(),
+                ShiftNumber = Convert.ToInt32(reader["№_Смены"])
             };
-
-
-            if (HasColumn(reader, "Название_Участка"))
-                detail.SectorName = reader["Название_Участка"] != DBNull.Value ? reader["Название_Участка"].ToString() : string.Empty;
-
-            if (HasColumn(reader, "ФИО_рабочего"))
-                detail.WorkerFullName = reader["ФИО_рабочего"] != DBNull.Value ? reader["ФИО_рабочего"].ToString() : string.Empty;
-
-            if (HasColumn(reader, "№_Смены"))
-                detail.ShiftNumber = reader["№_Смены"] != DBNull.Value ? Convert.ToInt32(reader["№_Смены"]) : 0;
-
-            return detail;
-        }
-
-        private bool HasColumn(OleDbDataReader reader, string columnName)
-        {
-            for (int i = 0; i < reader.FieldCount; i++)
-            {
-                if (reader.GetName(i).Equals(columnName, StringComparison.OrdinalIgnoreCase))
-                    return true;
-            }
-            return false;
         }
     }
 }
-    
-

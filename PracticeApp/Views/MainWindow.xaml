@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Управление производством - Детали" Height="550" Width="1000">
+        Title="Управление производством - Детали" Height="550" Width="1100">
     
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
@@ -79,10 +79,14 @@
                           FontWeight="Normal" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding IdRecord}" Width="50"/>
-                        <DataGridTextColumn Header="Название детали" Binding="{Binding DetailName}" Width="*"/>
-                        <DataGridTextColumn Header="Объем партии" Binding="{Binding BatchVolume}" Width="100"/>
+                        <DataGridTextColumn Header="Название детали" Binding="{Binding DetailName}" Width="150"/>
+                        <DataGridTextColumn Header="Объем партии" Binding="{Binding BatchVolume}" Width="100"/> 
+
+                        <DataGridTextColumn Header="Норма времени" Binding="{Binding TimeNorm}" Width="110"/>
+                        <DataGridTextColumn Header="Дата изготовления" Binding="{Binding ManufactureDate, StringFormat={}{0:dd.MM.yyyy}}" Width="140"/>
+
                         <DataGridTextColumn Header="Участок" Binding="{Binding SectorName}" Width="150"/>
-                        <DataGridTextColumn Header="Рабочий" Binding="{Binding WorkerFullName}" Width="200"/>
+                        <DataGridTextColumn Header="Рабочий" Binding="{Binding WorkerFullName}" Width="150"/>
                         <DataGridTextColumn Header="Смена №" Binding="{Binding ShiftNumber}" Width="80"/>
                     </DataGrid.Columns>
                 </DataGrid>

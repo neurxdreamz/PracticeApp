@@ -43,6 +43,12 @@ namespace PracticeApp.ViewModels
         [ObservableProperty]
         private ObservableCollection<Shift> _shifts;
 
+        [ObservableProperty]
+        private int _timeNorm;
+
+        [ObservableProperty]
+        private DateTime _manufactureDate = DateTime.Now; 
+
         public Action CloseAction { get; set; }
 
        
@@ -79,7 +85,9 @@ namespace PracticeApp.ViewModels
                     BatchVolume = BatchVolume,
                     SectorId = SectorId,   
                     WorkerId = WorkerId,
-                    ShiftId = ShiftId
+                    ShiftId = ShiftId,
+                    TimeNorm = TimeNorm,
+                    ManufactureDate = ManufactureDate
                 };
 
                 _detailService.AddDetail(newDetail);

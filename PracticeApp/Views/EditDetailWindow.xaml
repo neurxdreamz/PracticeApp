@@ -1,7 +1,7 @@
 ﻿<Window x:Class="PracticeApp.Views.EditDetailWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Редактирование детали" Height="350" Width="300" 
+        Title="Редактирование детали" Height="450" Width="300" 
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
 
     <StackPanel Margin="15">
@@ -10,6 +10,14 @@
 
         <TextBlock Text="Объем партии:"/>
         <TextBox Text="{Binding BatchVolume}" Margin="0,0,0,10" Padding="2"/>
+
+        <TextBlock Text="Норма времени (часов):"/>
+        <TextBox Text="{Binding TimeNorm, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" Padding="4"/>
+
+        <TextBlock Text="Дата изготовления:"/>
+        <DatePicker SelectedDate="{Binding ManufactureDate}" Margin="0,0,0,10" Padding="4"/>
+
+
 
         <TextBlock Text="Участок:"/>
         <ComboBox ItemsSource="{Binding Sectors}" 
@@ -32,6 +40,6 @@
                   SelectedValue="{Binding ShiftId}" 
                   Margin="0,0,0,20" Padding="2"/>
 
-        <Button Content="Сохранить изменения" Command="{Binding SaveCommand}" Height="30"/>
+        <Button Content="Сохранить изменения" Command="{Binding SaveCommand}" Height="30"  Background="#4169E1" Foreground="White" FontWeight="Bold" BorderThickness="0"/>
     </StackPanel>
 </Window>

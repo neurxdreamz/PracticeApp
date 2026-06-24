@@ -73,6 +73,9 @@ namespace Business_Logic.Services
             if (detail.BatchVolume <= 0)
                 throw new ArgumentException("Объем партии должен быть больше нуля.");
 
+            if (detail.TimeNorm <= 0)
+                throw new ArgumentException("Норма времени должна быть больше нуля.");
+
             if (detail.SectorId <= 0)
                 throw new ArgumentException("Необходимо выбрать участок, на котором производилась деталь.");
 

@@ -43,6 +43,12 @@ namespace PracticeApp.ViewModels
         [ObservableProperty]
         private ObservableCollection<Shift> _shifts;
 
+        [ObservableProperty]
+        private int _timeNorm;
+
+        [ObservableProperty]
+        private DateTime _manufactureDate;
+
         public Action CloseAction { get; set; }
 
         public EditDetailViewModel(
@@ -75,6 +81,8 @@ namespace PracticeApp.ViewModels
             SectorId = selectedDetail.SectorId;
             WorkerId = selectedDetail.WorkerId;
             ShiftId = selectedDetail.ShiftId;
+            TimeNorm = selectedDetail.TimeNorm;
+            ManufactureDate = selectedDetail.ManufactureDate;
         }
 
         [RelayCommand]
@@ -89,7 +97,9 @@ namespace PracticeApp.ViewModels
                     BatchVolume = BatchVolume,
                     SectorId = SectorId,
                     WorkerId = WorkerId,
-                    ShiftId = ShiftId
+                    ShiftId = ShiftId,
+                    TimeNorm = TimeNorm,
+                    ManufactureDate = ManufactureDate
                 };
 
               

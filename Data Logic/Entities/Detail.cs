@@ -20,5 +20,8 @@ namespace Data_Logic.Entities
         public string SectorName { get; set; }
         public string WorkerFullName { get; set; }
         public int ShiftNumber { get; set; }
+
+        public int TimeNorm { get; set; }        
+        public DateTime ManufactureDate { get; set; } 
     }
 }

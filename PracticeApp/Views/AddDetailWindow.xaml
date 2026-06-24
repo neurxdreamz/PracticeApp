@@ -1,7 +1,7 @@
 ﻿<Window x:Class="PracticeApp.Views.AddDetailWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Добавление новой детали" Height="350" Width="300" 
+        Title="Добавление новой детали" Height="450" Width="350" 
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
 
     <StackPanel Margin="15">
@@ -10,6 +10,12 @@
 
         <TextBlock Text="Объем партии:"/>
         <TextBox Text="{Binding BatchVolume}" Margin="0,0,0,10" Padding="2"/>
+
+        <TextBlock Text="Норма времени (часов):"/>
+        <TextBox Text="{Binding TimeNorm, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" Padding="4"/>
+
+        <TextBlock Text="Дата изготовления:"/>
+        <DatePicker SelectedDate="{Binding ManufactureDate}" Margin="0,0,0,10" Padding="4"/>
 
         <TextBlock Text="Участок:"/>
         <ComboBox ItemsSource="{Binding Sectors}" 
