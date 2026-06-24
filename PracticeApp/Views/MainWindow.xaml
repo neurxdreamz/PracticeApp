@@ -82,7 +82,11 @@
                           Margin="5">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding IdWorker}" Width="50"/>
-                        <DataGridTextColumn Header="ФИО Рабочего" Binding="{Binding FullName}" Width="*"/>
+                        <DataGridTextColumn Header="ФИО Рабочего" Binding="{Binding FullName}" Width="200"/>
+
+                        <DataGridTextColumn Header="Специальность" Binding="{Binding Specialty}" Width="150"/>
+                        <DataGridTextColumn Header="Разряд" Binding="{Binding Grade}" Width="80"/>
+                        <DataGridTextColumn Header="Тарифная ставка" Binding="{Binding TariffRate, StringFormat={}{0:N2} ₽}" Width="120"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
