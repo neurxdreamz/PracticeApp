@@ -1,0 +1,17 @@
+﻿<Window x:Class="PracticeApp.Views.AddShiftWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Добавление смены" Height="250" Width="300" 
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+
+    <StackPanel Margin="20">
+        <TextBlock Text="Номер смены:"/>
+        <TextBox Text="{Binding ShiftNumber}" Margin="0,0,0,10" Padding="4"/>
+
+        <TextBlock Text="ФИО Бригадира:"/>
+        <TextBox Text="{Binding Foreman}" Margin="0,0,0,20" Padding="4"/>
+
+        <Button Content="Добавить смену" Command="{Binding SaveCommand}" 
+                Height="35" Background="#3CB371" Foreground="White" FontWeight="Bold" BorderThickness="0"/>
+    </StackPanel>
+</Window>

@@ -51,6 +51,12 @@ namespace PracticeApp
             services.AddTransient<LoginViewModel>();
             services.AddTransient<LoginWindow>();
 
+            services.AddTransient<AddWorkerViewModel>();
+            services.AddTransient<AddWorkerWindow>();
+
+            services.AddTransient<EditWorkerViewModel>();
+            services.AddTransient<EditWorkerWindow>();
+
         }
 
 

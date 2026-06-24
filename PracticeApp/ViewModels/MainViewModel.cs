@@ -46,6 +46,18 @@ namespace PracticeApp.ViewModels
         [ObservableProperty]
         private ObservableCollection<Shift> _shifts;
 
+        [ObservableProperty]
+        private Worker _selectedWorker;
+
+        [ObservableProperty]
+        private int _selectedTableIndex;
+
+        [ObservableProperty]
+        private Sector _selectedSector;
+
+        [ObservableProperty]
+        private Shift _selectedShift;
+
 
         public void SetupAccessRights(int roleId)
         {
@@ -92,74 +104,160 @@ namespace PracticeApp.ViewModels
         }
 
         [RelayCommand]
-        private void OpenAddWindow()
+        private void GlobalAdd()
         {
-           
-            var addWindow = _serviceProvider.GetRequiredService<AddDetailWindow>();
+            switch (SelectedTableIndex)
+            {
+                case 0: 
+                    var addWindow = _serviceProvider.GetRequiredService<AddDetailWindow>();
+                    addWindow.ShowDialog();
+                    LoadDetails(); 
+                    break;
 
-           
-            addWindow.ShowDialog();
+                case 1: 
+               
+                    var addWorkerWindow = _serviceProvider.GetRequiredService<AddWorkerWindow>();
+                    addWorkerWindow.ShowDialog();
 
+                    Workers = new ObservableCollection<Worker>(_workerService.GetAllWorkers());
+                    break;
 
-            LoadDetails();
+                case 2: 
+                    var addSectorWindow = _serviceProvider.GetRequiredService<AddSectorWindow>();
+                    addSectorWindow.ShowDialog();
+                    Sectors = new ObservableCollection<Sector>(_sectorService.GetAllSectors());
+                    break;
 
-           
+                case 3: 
+                    var addShiftWindow = _serviceProvider.GetRequiredService<AddShiftWindow>();
+                    addShiftWindow.ShowDialog();
+                    Shifts = new ObservableCollection<Shift>(_shiftService.GetAllShifts());
+                    break;
+            }
         }
 
         [RelayCommand]
-        private void DeleteDetail()
+        private void GlobalEdit()
         {
-            
-            if (SelectedDetail == null)
+            switch (SelectedTableIndex)
             {
-                MessageBox.Show("Сначала выберите деталь для удаления.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
+                case 0:
+                    if (SelectedDetail == null)
+                    {
+                        MessageBox.Show("Сначала выберите деталь для редактирования.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
+                        return;
+                    }
 
-       
-            var result = MessageBox.Show($"Вы уверены, что хотите удалить деталь '{SelectedDetail.DetailName}'?",
-                                         "Подтверждение удаления",
-                                         MessageBoxButton.YesNo,
-                                         MessageBoxImage.Question);
+                    var editWindow = _serviceProvider.GetRequiredService<EditDetailWindow>();
+                    var editViewModel = (EditDetailViewModel)editWindow.DataContext;
 
-            if (result == MessageBoxResult.Yes)
-            {
-                try
-                {
-                   
-                    _detailService.DeleteDetail(SelectedDetail.IdRecord);
+                    editViewModel.Initialize(SelectedDetail); 
+                    editWindow.ShowDialog();
 
-                   
-                    LoadDetails();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Ошибка при удалении", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                    LoadDetails(); 
+                    break;
+
+                case 1: 
+                    if (SelectedWorker == null)
+                    {
+                        MessageBox.Show("Сначала выберите рабочего для редактирования.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
+                        return;
+                    }
+
+                    
+                    var editWorkerWindow = _serviceProvider.GetRequiredService<EditWorkerWindow>();
+                    var editWorkerViewModel = (EditWorkerViewModel)editWorkerWindow.DataContext;
+
+                    
+                    editWorkerViewModel.Initialize(SelectedWorker);
+
+                    
+                    editWorkerWindow.ShowDialog();
+
+                    
+                    Workers = new ObservableCollection<Worker>(_workerService.GetAllWorkers());
+                    break;
+
+                case 2: 
+                    if (SelectedSector == null) { MessageBox.Show("Выберите участок."); return; }
+                    var editSectorWindow = _serviceProvider.GetRequiredService<EditSectorWindow>();
+                    var editSectorVM = (EditSectorViewModel)editSectorWindow.DataContext;
+                    editSectorVM.Initialize(SelectedSector);
+                    editSectorWindow.ShowDialog();
+                    Sectors = new ObservableCollection<Sector>(_sectorService.GetAllSectors());
+                    break;
+
+                case 3: 
+                    if (SelectedShift == null) { MessageBox.Show("Выберите смену."); return; }
+                    var editShiftWindow = _serviceProvider.GetRequiredService<EditShiftWindow>();
+                    var editShiftVM = (EditShiftViewModel)editShiftWindow.DataContext;
+                    editShiftVM.Initialize(SelectedShift);
+                    editShiftWindow.ShowDialog();
+                    Shifts = new ObservableCollection<Shift>(_shiftService.GetAllShifts());
+                    break;
             }
         }
+
+
+
+
         [RelayCommand]
-        private void OpenEditWindow()
+        private void GlobalDelete()
         {
-           
-            if (SelectedDetail == null)
+            switch (SelectedTableIndex)
             {
-                MessageBox.Show("Сначала выберите деталь для редактирования.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
+                case 0: 
+                    if (SelectedDetail == null)
+                    {
+                        MessageBox.Show("Выберите деталь для удаления.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
+                        return;
+                    }
+                    if (MessageBox.Show($"Удалить деталь '{SelectedDetail.DetailName}'?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        _detailService.DeleteDetail(SelectedDetail.IdRecord);
+                        LoadDetails(); 
+                    }
+                    break;
+
+                case 1: 
+                    if (SelectedWorker == null)
+                    {
+                        MessageBox.Show("Выберите рабочего для удаления.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
+                        return;
+                    }
+                    if (MessageBox.Show($"Удалить рабочего '{SelectedWorker.FullName}'?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        _workerService.DeleteWorker(SelectedWorker.IdWorker);
+                        Workers = new ObservableCollection<Worker>(_workerService.GetAllWorkers());
+                    }
+                    break;
+
+                case 2: 
+                    if (SelectedSector == null)
+                    {
+                        MessageBox.Show("Выберите участок для удаления.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
+                        return;
+                    }
+                    if (MessageBox.Show($"Удалить участок '{SelectedSector.SectorName}'?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        _sectorService.DeleteSector(SelectedSector.IdSector);
+                        Sectors = new ObservableCollection<Sector>(_sectorService.GetAllSectors());
+                    }
+                    break;
+
+                case 3: 
+                    if (SelectedShift == null)
+                    {
+                        MessageBox.Show("Выберите смену для удаления.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
+                        return;
+                    }
+                    if (MessageBox.Show($"Удалить смену №{SelectedShift.ShiftNumber}?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        _shiftService.DeleteShift(SelectedShift.IdShift);
+                        Shifts = new ObservableCollection<Shift>(_shiftService.GetAllShifts());
+                    }
+                    break;
             }
-
-           
-            var editWindow = _serviceProvider.GetRequiredService<EditDetailWindow>();
-
-           
-            var editViewModel = (EditDetailViewModel)editWindow.DataContext;
-            editViewModel.Initialize(SelectedDetail); 
-
-          
-            editWindow.ShowDialog();
-
-           
-            LoadDetails();
         }
 
         private bool FilterDetails(object obj)

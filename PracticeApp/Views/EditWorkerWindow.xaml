@@ -1,0 +1,23 @@
+﻿<Window x:Class="PracticeApp.Views.EditWorkerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Редактирование сотрудника" Height="330" Width="300" 
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+
+    <StackPanel Margin="20">
+        <TextBlock Text="ФИО Рабочего:"/>
+        <TextBox Text="{Binding FullName}" Margin="0,0,0,10" Padding="4"/>
+
+        <TextBlock Text="Специальность:"/>
+        <TextBox Text="{Binding Specialty}" Margin="0,0,0,10" Padding="4"/>
+
+        <TextBlock Text="Разряд:"/>
+        <TextBox Text="{Binding Grade}" Margin="0,0,0,10" Padding="4"/>
+
+        <TextBlock Text="Тарифная ставка (в рублях):"/>
+        <TextBox Text="{Binding TariffRate}" Margin="0,0,0,20" Padding="4"/>
+
+        <Button Content="Сохранить изменения" Command="{Binding SaveCommand}" 
+                Height="35" Background="#4169E1" Foreground="White" FontWeight="Bold" BorderThickness="0"/>
+    </StackPanel>
+</Window>

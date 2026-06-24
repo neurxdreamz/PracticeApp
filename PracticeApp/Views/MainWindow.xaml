@@ -10,59 +10,73 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
     </Window.Resources>
 
-    <Grid Margin="10">
+    <Grid Background="#F5F5F5">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="1" Margin="0,0,0,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="#4169E1" Padding="20,0">
+            <Grid>
+                <TextBlock Text="УПРАВЛЕНИЕ ПРОИЗВОДСТВОМ" Foreground="White" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <TextBlock Text="Роль: Администратор" Foreground="White" Margin="0,0,20,0" VerticalAlignment="Center"/>
+                    <Button Content="Выйти из аккаунта" Background="#00BFFF" Foreground="White" BorderThickness="0" Padding="15,8" FontWeight="Bold"/>
+                </StackPanel>
+            </Grid>
+        </Border>
 
-            <TextBlock Text="Поиск: " VerticalAlignment="Center" FontWeight="Bold" Foreground="#333" Margin="0,0,5,0"/>
+        <Border Grid.Row="1" Grid.Column="0" Background="White" BorderBrush="#E0E0E0" BorderThickness="0,0,1,0" Padding="15">
+            <StackPanel>
+                <TextBlock Text="ТАБЛИЦА" Foreground="Gray" FontWeight="Bold" Margin="0,0,0,5"/>
+                <ComboBox SelectedIndex="{Binding SelectedTableIndex}" Margin="0,0,0,20" Padding="5">
+                    <ComboBoxItem Content="Детали"/>
+                    <ComboBoxItem Content="Рабочие"/>
+                    <ComboBoxItem Content="Участки"/>
+                    <ComboBoxItem Content="Смены"/>
+                </ComboBox>
 
-            <TextBox Grid.Column="1" 
-                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
-                     Padding="4" 
-                     VerticalContentAlignment="Center"
-                     ToolTip="Введите название детали, ФИО рабочего или участок для фильтрации..."/>
-        </Grid>
+                <TextBlock Text="ПОИСК" Foreground="Gray" FontWeight="Bold" Margin="0,0,0,5"/>
+                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" Padding="5" />
+                <Button Content="Найти" BorderBrush="#4169E1" Foreground="#4169E1" Background="White" Padding="5" Margin="0,0,0,30" FontWeight="Bold"/>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-            <Button Content="Добавить деталь" Command="{Binding OpenAddWindowCommand}" 
-                    Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}" 
-                    Width="120" Margin="0,0,10,0" Padding="5"/>
+                <TextBlock Text="УПРАВЛЕНИЕ" Foreground="Gray" FontWeight="Bold" Margin="0,0,0,5"/>
 
-            <Button Content="Редактировать" Command="{Binding OpenEditWindowCommand}" 
-                    Visibility="{Binding IsEditor, Converter={StaticResource BoolToVis}}" 
-                    Width="120" Margin="0,0,10,0" Padding="5"/>
+                <Button Content="+ Добавить" Command="{Binding GlobalAddCommand}" 
+                        Background="#3CB371" Foreground="White" FontWeight="Bold" 
+                        Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}" 
+                        Height="40" Margin="0,0,0,10" BorderThickness="0"/>
 
-            <Button Content="Удалить" Command="{Binding DeleteDetailCommand}" 
-                    Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}" 
-                    Width="100" Margin="0,0,10,0" Padding="5"/>
+                <Button Content="Редактировать" Command="{Binding GlobalEditCommand}" 
+                        Background="#4169E1" Foreground="White" FontWeight="Bold" 
+                        Visibility="{Binding IsEditor, Converter={StaticResource BoolToVis}}" 
+                        Height="40" Margin="0,0,0,10" BorderThickness="0"/>
 
-            <Button Content="Обновить" Command="{Binding RefreshCommand}" 
-                    Width="100" Padding="5"/>
-        </StackPanel>
+                <Button Content="x Удалить" Command="{Binding GlobalDeleteCommand}" 
+                        Background="#DC143C" Foreground="White" FontWeight="Bold" 
+                        Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}" 
+                        Height="40" Margin="0,0,0,30" BorderThickness="0"/>
 
-        <TabControl Grid.Row="2" Margin="0,5,0,0">
+                <Button Content="Обновить данные" Command="{Binding RefreshCommand}" 
+                        Background="White" BorderBrush="#E0E0E0" Padding="10" Margin="0,0,0,10"/>
+            </StackPanel>
+        </Border>
 
-            <TabItem Header="Детали" FontSize="14" FontWeight="Normal">
-                <DataGrid ItemsSource="{Binding Details}" 
-                          SelectedItem="{Binding SelectedDetail}" 
-                          FontWeight="Normal" 
-                          AutoGenerateColumns="False" 
-                          IsReadOnly="True" 
-                          SelectionMode="Single"
-                          Margin="5" SelectionChanged="DataGrid_SelectionChanged">
+        <TabControl Grid.Row="1" Grid.Column="1" SelectedIndex="{Binding SelectedTableIndex}" Margin="10" BorderThickness="0" Background="Transparent">
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="TabItem">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Style>
+            </TabControl.ItemContainerStyle>
+
+            <TabItem>
+                <DataGrid ItemsSource="{Binding Details}" SelectedItem="{Binding SelectedDetail}" 
+                          FontWeight="Normal" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding IdRecord}" Width="50"/>
                         <DataGridTextColumn Header="Название детали" Binding="{Binding DetailName}" Width="*"/>
@@ -74,16 +88,12 @@
                 </DataGrid>
             </TabItem>
 
-            <TabItem Header="Рабочие" FontSize="14" FontWeight="Normal">
-                <DataGrid ItemsSource="{Binding Workers}" 
-                          FontWeight="Normal" 
-                          AutoGenerateColumns="False" 
-                          IsReadOnly="True" 
-                          Margin="5">
+            <TabItem>
+                <DataGrid ItemsSource="{Binding Workers}" SelectedItem="{Binding SelectedWorker}" 
+                          FontWeight="Normal" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding IdWorker}" Width="50"/>
                         <DataGridTextColumn Header="ФИО Рабочего" Binding="{Binding FullName}" Width="200"/>
-
                         <DataGridTextColumn Header="Специальность" Binding="{Binding Specialty}" Width="150"/>
                         <DataGridTextColumn Header="Разряд" Binding="{Binding Grade}" Width="80"/>
                         <DataGridTextColumn Header="Тарифная ставка" Binding="{Binding TariffRate, StringFormat={}{0:N2} ₽}" Width="120"/>
@@ -91,27 +101,18 @@
                 </DataGrid>
             </TabItem>
 
-            <TabItem Header="Участки" FontSize="14" FontWeight="Normal">
-                <DataGrid ItemsSource="{Binding Sectors}" 
-                          FontWeight="Normal" 
-                          AutoGenerateColumns="False" 
-                          IsReadOnly="True" 
-                          Margin="5">
+            <TabItem>
+                <DataGrid ItemsSource="{Binding Sectors}" FontWeight="Normal" AutoGenerateColumns="False" IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding IdSector}" Width="50"/>
                         <DataGridTextColumn Header="Название участка" Binding="{Binding SectorName}" Width="150"/>
-
-                        <DataGridTextColumn Header="ФИО Начальника" Binding="{Binding ManagerFullName}" Width="*"/>
+                        <DataGridTextColumn Header="ФИО Начальника" Binding="{Binding Supervisor}" Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
 
-            <TabItem Header="Смены" FontSize="14" FontWeight="Normal">
-                <DataGrid ItemsSource="{Binding Shifts}" 
-                          FontWeight="Normal" 
-                          AutoGenerateColumns="False" 
-                          IsReadOnly="True" 
-                          Margin="5">
+            <TabItem>
+                <DataGrid ItemsSource="{Binding Shifts}" FontWeight="Normal" AutoGenerateColumns="False" IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding IdShift}" Width="50"/>
                         <DataGridTextColumn Header="Номер смены" Binding="{Binding ShiftNumber}" Width="120"/>
@@ -119,7 +120,6 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
-
         </TabControl>
     </Grid>
 </Window>

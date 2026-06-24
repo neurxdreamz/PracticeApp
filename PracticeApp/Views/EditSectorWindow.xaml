@@ -1,0 +1,17 @@
+﻿<Window x:Class="PracticeApp.Views.EditSectorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Редактирование участка" Height="250" Width="300" 
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+
+    <StackPanel Margin="20">
+        <TextBlock Text="Название участка:"/>
+        <TextBox Text="{Binding SectorName}" Margin="0,0,0,10" Padding="4"/>
+
+        <TextBlock Text="ФИО Начальника:"/>
+        <TextBox Text="{Binding Supervisor}" Margin="0,0,0,20" Padding="4"/>
+
+        <Button Content="Сохранить изменения" Command="{Binding SaveCommand}" 
+                Height="35" Background="#4169E1" Foreground="White" FontWeight="Bold" BorderThickness="0"/>
+    </StackPanel>
+</Window>
