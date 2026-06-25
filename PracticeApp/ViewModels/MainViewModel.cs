@@ -301,42 +301,55 @@ namespace PracticeApp.ViewModels
         [RelayCommand]
         private void ExportToPdf()
         {
-           
-            if (Details == null || Details.Count == 0)
-            {
-                MessageBox.Show("Нет данных для формирования отчета.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-          
             Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog
             {
-                FileName = $"Отчет_производства_{DateTime.Now:yyyyMMdd}", 
-                DefaultExt = ".pdf",                                      
-                Filter = "PDF Documents (.pdf)|*.pdf"                  
+                FileName = $"Отчет_{DateTime.Now:yyyyMMdd}",
+                DefaultExt = ".pdf",
+                Filter = "PDF Documents (.pdf)|*.pdf"
             };
 
-          
             if (saveFileDialog.ShowDialog() == true)
             {
                 try
                 {
-                    
-                    var filteredData = new List<Detail>();
-                    foreach (var item in _detailsView)
+                    switch (SelectedTableIndex)
                     {
-                        if (item is Detail detail)
-                            filteredData.Add(detail);
-                    }
+                        case 0: 
+                            var detailsList = _detailsView.Cast<Detail>().ToList();
+                            if (!detailsList.Any()) throw new Exception("Нет данных для отчета.");
+                            _reportService.ExportDetailsToPdf(saveFileDialog.FileName, detailsList);
+                            break;
 
-                    
-                    _reportService.ExportDetailsToPdf(saveFileDialog.FileName, filteredData);
+                        case 1:
+                            var workersList = _workersView.Cast<Worker>().ToList();
+                            if (!workersList.Any()) throw new Exception("Нет данных для отчета.");
+                            _reportService.ExportGenericDataToPdf(saveFileDialog.FileName, workersList);
+                            break;
+
+                        case 2: 
+                            var sectorsList = _sectorsView.Cast<Sector>().ToList();
+                            if (!sectorsList.Any()) throw new Exception("Нет данных для отчета.");
+                            _reportService.ExportGenericDataToPdf(saveFileDialog.FileName, sectorsList);
+                            break;
+
+                        case 3:
+                            var shiftsList = _shiftsView.Cast<Shift>().ToList();
+                            if (!shiftsList.Any()) throw new Exception("Нет данных для отчета.");
+                            _reportService.ExportGenericDataToPdf(saveFileDialog.FileName, shiftsList);
+                            break;
+
+                        case 4: 
+                            if (QueryResults == null || !QueryResults.Any())
+                                throw new Exception("Сначала выберите аналитический запрос для формирования отчета.");
+                            _reportService.ExportGenericDataToPdf(saveFileDialog.FileName, QueryResults);
+                            break;
+                    }
 
                     MessageBox.Show("Отчет успешно сохранен в PDF!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка при сохранении отчета: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(ex.Message, "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
         }
