@@ -28,12 +28,12 @@
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,20,0">
                         <TextBlock Text="Роль: " Foreground="White" FontSize="14" VerticalAlignment="Center"/>
                         <TextBlock Text="{Binding CurrentUserRoleName}" 
-                       Foreground="White" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                   Foreground="White" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" Margin="5,0,0,0"/>
                     </StackPanel>
                     <Button Content="Выйти из аккаунта" 
-        Command="{Binding LogoutCommand}"
-        Background="#00BFFF" Foreground="White" FontWeight="Bold" 
-        BorderThickness="0" Padding="15,5" Cursor="Hand"/>
+                            Command="{Binding LogoutCommand}"
+                            Background="#00BFFF" Foreground="White" FontWeight="Bold" 
+                            BorderThickness="0" Padding="15,5" Cursor="Hand"/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -49,8 +49,7 @@
                 </ComboBox>
 
                 <TextBlock Text="ПОИСК" Foreground="Gray" FontWeight="Bold" Margin="0,0,0,5"/>
-                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" Padding="5" />
-              
+                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,20" Padding="5" />
 
                 <TextBlock Text="УПРАВЛЕНИЕ" Foreground="Gray" FontWeight="Bold" Margin="0,0,0,5"/>
 
@@ -67,95 +66,116 @@
                 <Button Content="x Удалить" Command="{Binding GlobalDeleteCommand}" 
                         Background="#DC143C" Foreground="White" FontWeight="Bold" 
                         Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}" 
-                        Height="40" Margin="0,0,0,30" BorderThickness="0"/>
-                <Button Content="Обновить данные" Command="{Binding RefreshCommand}" 
-                        Background="White" BorderBrush="#E0E0E0" Padding="10"/>
+                        Height="40" Margin="0,0,0,10" BorderThickness="0"/>
 
                 <Button Content="Управление пользователями" 
-                Command="{Binding OpenUserManagementCommand}"
-                Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"
-                Height="35" Background="#7B68EE" Foreground="White" FontWeight="Bold" 
-                BorderThickness="0" Margin="0,15,0,0"/>
+                        Command="{Binding OpenUserManagementCommand}"
+                        Visibility="{Binding IsAdmin, Converter={StaticResource BoolToVis}}"
+                        Height="35" Background="#7B68EE" Foreground="White" FontWeight="Bold" 
+                        BorderThickness="0" Margin="0,0,0,10"/>
+
                 <Button Content="Сформировать PDF отчет" 
-                Command="{Binding ExportToPdfCommand}"
-                Height="35" Background="#4A65F6" Foreground="White" FontWeight="Bold" 
-                BorderThickness="0" Margin="0,10,0,0" Cursor="Hand">
-            <Button.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="CornerRadius" Value="3"/>
-                </Style>
-            </Button.Resources>
-        </Button>
+                        Command="{Binding ExportToPdfCommand}"
+                        Height="35" Background="#4A65F6" Foreground="White" FontWeight="Bold" 
+                        BorderThickness="0" Margin="0,0,0,0" Cursor="Hand">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="3"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
             </StackPanel>
         </Border>
 
-        <TabControl Grid.Row="1" Grid.Column="1" SelectedIndex="{Binding SelectedTableIndex}" Margin="10" BorderThickness="0" Background="Transparent">
-            <TabControl.ItemContainerStyle>
-                <Style TargetType="TabItem">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                </Style>
-            </TabControl.ItemContainerStyle>
+        <Grid Grid.Row="1" Grid.Column="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <TabItem>
-                <DataGrid ItemsSource="{Binding Details}" SelectedItem="{Binding SelectedDetail}" 
-                          FontWeight="Normal" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" Binding="{Binding IdRecord}" Width="50"/>
-                        <DataGridTextColumn Header="Название детали" Binding="{Binding DetailName}" Width="150"/>
-                        <DataGridTextColumn Header="Объем партии" Binding="{Binding BatchVolume}" Width="100"/> 
+            <Button Grid.Row="0" Command="{Binding RefreshCommand}" 
+                    HorizontalAlignment="Right" Margin="0,0,0,10"
+                    Background="Transparent" BorderThickness="1" BorderBrush="#B0C4DE"
+                    Foreground="#4169E1" Padding="10,5" Cursor="Hand">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="4"/>
+                    </Style>
+                </Button.Resources>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="↻" FontSize="16" FontWeight="Bold" Margin="0,-2,5,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="Обновить" FontWeight="Bold" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
 
-                        <DataGridTextColumn Header="Норма времени" Binding="{Binding TimeNorm}" Width="110"/>
-                        <DataGridTextColumn Header="Дата изготовления" Binding="{Binding ManufactureDate, StringFormat={}{0:dd.MM.yyyy}}" Width="140"/>
+            <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTableIndex}" BorderThickness="0" Background="Transparent">
+                <TabControl.ItemContainerStyle>
+                    <Style TargetType="TabItem">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                    </Style>
+                </TabControl.ItemContainerStyle>
 
-                        <DataGridTextColumn Header="Участок" Binding="{Binding SectorName}" Width="150"/>
-                        <DataGridTextColumn Header="Рабочий" Binding="{Binding WorkerFullName}" Width="150"/>
-                        <DataGridTextColumn Header="Смена №" Binding="{Binding ShiftNumber}" Width="80"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </TabItem>
+                <TabItem>
+                    <DataGrid ItemsSource="{Binding Details}" SelectedItem="{Binding SelectedDetail}" 
+                              FontWeight="Normal" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding IdRecord}" Width="50"/>
+                            <DataGridTextColumn Header="Название детали" Binding="{Binding DetailName}" Width="150"/>
+                            <DataGridTextColumn Header="Объем партии" Binding="{Binding BatchVolume}" Width="100"/>
 
-            <TabItem>
-                <DataGrid ItemsSource="{Binding Workers}" SelectedItem="{Binding SelectedWorker}" 
-                          FontWeight="Normal" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" Binding="{Binding IdWorker}" Width="50"/>
-                        <DataGridTextColumn Header="ФИО Рабочего" Binding="{Binding FullName}" Width="200"/>
-                        <DataGridTextColumn Header="Специальность" Binding="{Binding Specialty}" Width="150"/>
-                        <DataGridTextColumn Header="Разряд" Binding="{Binding Grade}" Width="80"/>
-                        <DataGridTextColumn Header="Тарифная ставка" Binding="{Binding TariffRate, StringFormat={}{0:N2} ₽}" Width="120"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </TabItem>
+                            <DataGridTextColumn Header="Норма времени" Binding="{Binding TimeNorm}" Width="110"/>
+                            <DataGridTextColumn Header="Дата изготовления" Binding="{Binding ManufactureDate, StringFormat={}{0:dd.MM.yyyy}}" Width="140"/>
 
-            <TabItem>
-                <DataGrid ItemsSource="{Binding Sectors}" 
-                          SelectedItem="{Binding SelectedSector}" 
-                          FontWeight="Normal" 
-                          AutoGenerateColumns="False" 
-                          IsReadOnly="True" 
-                          SelectionMode="Single">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" Binding="{Binding IdSector}" Width="50"/>
-                        <DataGridTextColumn Header="Название участка" Binding="{Binding SectorName}" Width="150"/>
-                        <DataGridTextColumn Header="ФИО Начальника" Binding="{Binding ManagerFullName}" Width="*"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </TabItem>
+                            <DataGridTextColumn Header="Участок" Binding="{Binding SectorName}" Width="150"/>
+                            <DataGridTextColumn Header="Рабочий" Binding="{Binding WorkerFullName}" Width="150"/>
+                            <DataGridTextColumn Header="Смена №" Binding="{Binding ShiftNumber}" Width="80"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
 
-            <TabItem>
-                <DataGrid ItemsSource="{Binding Shifts}" 
-                          SelectedItem="{Binding SelectedShift}" 
-                          FontWeight="Normal" 
-                          AutoGenerateColumns="False" 
-                          IsReadOnly="True" 
-                          SelectionMode="Single">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" Binding="{Binding IdShift}" Width="50"/>
-                        <DataGridTextColumn Header="Номер смены" Binding="{Binding ShiftNumber}" Width="120"/>
-                        <DataGridTextColumn Header="ФИО Бригадира" Binding="{Binding Foreman}" Width="*"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </TabItem>
-        </TabControl>
+                <TabItem>
+                    <DataGrid ItemsSource="{Binding Workers}" SelectedItem="{Binding SelectedWorker}" 
+                              FontWeight="Normal" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding IdWorker}" Width="50"/>
+                            <DataGridTextColumn Header="ФИО Рабочего" Binding="{Binding FullName}" Width="200"/>
+                            <DataGridTextColumn Header="Специальность" Binding="{Binding Specialty}" Width="150"/>
+                            <DataGridTextColumn Header="Разряд" Binding="{Binding Grade}" Width="80"/>
+                            <DataGridTextColumn Header="Тарифная ставка" Binding="{Binding TariffRate, StringFormat={}{0:N2} ₽}" Width="120"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+
+                <TabItem>
+                    <DataGrid ItemsSource="{Binding Sectors}" 
+                              SelectedItem="{Binding SelectedSector}" 
+                              FontWeight="Normal" 
+                              AutoGenerateColumns="False" 
+                              IsReadOnly="True" 
+                              SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding IdSector}" Width="50"/>
+                            <DataGridTextColumn Header="Название участка" Binding="{Binding SectorName}" Width="150"/>
+                            <DataGridTextColumn Header="ФИО Начальника" Binding="{Binding ManagerFullName}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+
+                <TabItem>
+                    <DataGrid ItemsSource="{Binding Shifts}" 
+                              SelectedItem="{Binding SelectedShift}" 
+                              FontWeight="Normal" 
+                              AutoGenerateColumns="False" 
+                              IsReadOnly="True" 
+                              SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding IdShift}" Width="50"/>
+                            <DataGridTextColumn Header="Номер смены" Binding="{Binding ShiftNumber}" Width="120"/>
+                            <DataGridTextColumn Header="ФИО Бригадира" Binding="{Binding Foreman}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+            </TabControl>
+        </Grid>
     </Grid>
 </Window>

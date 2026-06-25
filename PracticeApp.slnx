@@ -2,4 +2,5 @@
   <Project Path="Business Logic/Business Logic.csproj" />
   <Project Path="Data Logic/Data Logic.csproj" />
   <Project Path="PracticeApp/PracticeApp.csproj" />
+  <Project Path="PractiseAppTests/PractiseAppTests.csproj" Id="47459057-a040-48c3-9412-302b637a2b09" />
 </Solution>
