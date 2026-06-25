@@ -417,5 +417,100 @@ namespace PracticeApp.ViewModels
             _shiftsView = CollectionViewSource.GetDefaultView(Shifts);
             _shiftsView.Filter = FilterShifts;
         }
+
+        private IEnumerable<object> _queryResults;
+        public IEnumerable<object> QueryResults
+        {
+            get => _queryResults;
+            set => SetProperty(ref _queryResults, value);
+        }
+
+       
+        private int _selectedQueryIndex = -1;
+        public int SelectedQueryIndex
+        {
+            get => _selectedQueryIndex;
+            set
+            {
+               
+                if (SetProperty(ref _selectedQueryIndex, value))
+                {
+                    ExecuteQuery(value);
+                }
+            }
+        }
+
+        private void ExecuteQuery(int index)
+        {
+            if (Details == null || Workers == null) return;
+
+            switch (index)
+            {
+                case 0: 
+                    QueryResults = Details
+                        .Where(d => d.TimeNorm > 5)
+                        .Select(d => new
+                        {
+                            Деталь = d.DetailName,
+                            Норма_Часов = d.TimeNorm,
+                            Участок = d.SectorName
+                        }).ToList();
+                    break;
+
+                case 1: 
+                    QueryResults = Workers
+                        .Where(w => w.Grade >= 5)
+                        .Select(w => new
+                        {
+                            ФИО_Рабочего = w.FullName,
+                            Специальность = w.Specialty,
+                            Разряд = w.Grade,
+                            Ставка = w.TariffRate
+                        }).ToList();
+                    break;
+
+                case 2: 
+                    var lastMonth = DateTime.Now.AddDays(-30);
+                    QueryResults = Details
+                        .Where(d => d.ManufactureDate >= lastMonth)
+                        .Select(d => new
+                        {
+                            Деталь = d.DetailName,
+                            Объем = d.BatchVolume,
+                            Дата_Изготовления = d.ManufactureDate.ToString("dd.MM.yyyy")
+                        }).ToList();
+                    break;
+
+                case 3: 
+                    QueryResults = Workers
+                        .OrderByDescending(w => w.TariffRate)
+                        .Take(5)
+                        .Select(w => new
+                        {
+                            ФИО = w.FullName,
+                            Специальность = w.Specialty,
+                            Разряд = w.Grade,
+                            Ставка = w.TariffRate + " ₽"
+                        }).ToList();
+                    break;
+
+                case 4: 
+                    QueryResults = Details
+                        .GroupBy(d => d.SectorName)
+                        .Select(g => new
+                        {
+                            Название_Участка = g.Key,
+                            Количество_Заказов = g.Count(),
+                            Объем_Деталей = g.Sum(x => x.BatchVolume),
+                            Всего_Часов = g.Sum(x => x.TimeNorm)
+                        }).ToList();
+                    break;
+
+
+                default:
+                    QueryResults = null;
+                    break;
+            }
+        }
     }
 }

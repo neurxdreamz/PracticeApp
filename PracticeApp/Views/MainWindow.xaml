@@ -46,6 +46,7 @@
                     <ComboBoxItem Content="Рабочие"/>
                     <ComboBoxItem Content="Участки"/>
                     <ComboBoxItem Content="Смены"/>
+                    <ComboBoxItem Content="Специальные запросы"/>
                 </ComboBox>
 
                 <TextBlock Text="ПОИСК" Foreground="Gray" FontWeight="Bold" Margin="0,0,0,5"/>
@@ -122,10 +123,8 @@
                             <DataGridTextColumn Header="ID" Binding="{Binding IdRecord}" Width="50"/>
                             <DataGridTextColumn Header="Название детали" Binding="{Binding DetailName}" Width="150"/>
                             <DataGridTextColumn Header="Объем партии" Binding="{Binding BatchVolume}" Width="100"/>
-
                             <DataGridTextColumn Header="Норма времени" Binding="{Binding TimeNorm}" Width="110"/>
                             <DataGridTextColumn Header="Дата изготовления" Binding="{Binding ManufactureDate, StringFormat={}{0:dd.MM.yyyy}}" Width="140"/>
-
                             <DataGridTextColumn Header="Участок" Binding="{Binding SectorName}" Width="150"/>
                             <DataGridTextColumn Header="Рабочий" Binding="{Binding WorkerFullName}" Width="150"/>
                             <DataGridTextColumn Header="Смена №" Binding="{Binding ShiftNumber}" Width="80"/>
@@ -174,6 +173,46 @@
                             <DataGridTextColumn Header="ФИО Бригадира" Binding="{Binding Foreman}" Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
+                </TabItem>
+
+                <TabItem>
+                    <Grid Background="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                            <TextBlock Text="Выберите аналитический запрос:" 
+                                       VerticalAlignment="Center" 
+                                       FontWeight="Bold"
+                                       Foreground="Gray"
+                                       Margin="0,0,10,0"/>
+
+                            <ComboBox Width="350" 
+                                      SelectedIndex="{Binding SelectedQueryIndex}"
+                                      Padding="5">
+                                <ComboBoxItem Content="Детали с нормой времени > 5 часов"/>
+                                <ComboBoxItem Content="Рабочие с разрядом 5 и выше"/>
+                                <ComboBoxItem Content="Детали произведенные за последние 30 дней"/>
+                                <ComboBoxItem Content="Топ-5 сотрудников по тарифной ставке"/>
+                                <ComboBoxItem Content="Сводная производительность по участкам"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <DataGrid Grid.Row="1"
+                                  ItemsSource="{Binding QueryResults}"
+                                  AutoGenerateColumns="True"
+                                  IsReadOnly="True"
+                                  CanUserAddRows="False"
+                                  FontWeight="Normal"
+                                  SelectionMode="Single"
+                                  RowHeight="30"
+                                  ColumnWidth="*"
+                                  HeadersVisibility="Column"
+                                  Background="White">
+                        </DataGrid>
+                    </Grid>
                 </TabItem>
             </TabControl>
         </Grid>
